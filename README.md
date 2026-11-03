@@ -34,8 +34,11 @@ That means they are visible only on the device/browser where they were made.
 To make edits and enquiries work across devices, connect `store.js` to a backend
 (Firebase, Supabase, or your own API) — it is the only file to change; the rest of
 the site talks to it through `doc().get/set/onSnapshot` and `collection().onSnapshot`.
+<<<<<<< HEAD
 
 ## Brand update (Nov 2026)
 - **Logo:** replace `public/logo.svg` with the client's logo (same file name). For a PNG, put `logo.png` in `public/` and change `/logo.svg` to `/logo.png` in `src/site.jsx` and `index.html`.
 - **Colours:** edit the `--navy` / `--navy2` (main brand colour) and `--accent` / `--accent2` / `--accent-ink` (highlight) values at the top of `src/styles.css` (light block + the two dark blocks).
 - **New pages:** About us at `/#/about`, Privacy Policy at `/#/privacy` (linked in the nav and the footer). Use `https://solutionsindia.vercel.app/#/privacy` as the privacy-policy URL in the LinkedIn Lead Gen Form. Both pages are editable in the admin panel.
+=======
+>>>>>>> 81ee8dddd1aaf440fd3ff00529a48cfeede021a9

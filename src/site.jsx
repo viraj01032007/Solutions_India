@@ -28,7 +28,11 @@ function Particles(){const ref=useRef(null);
   size();const ro=new ResizeObserver(size);ro.observe(cv);
   const onm=e=>{const r=cv.getBoundingClientRect();m={x:e.clientX-r.left,y:e.clientY-r.top}};const off=()=>{m={x:-1e4,y:-1e4}};
   cv.parentElement.addEventListener("mousemove",onm);cv.parentElement.addEventListener("mouseleave",off);
+<<<<<<< HEAD
   const draw=()=>{ctx.clearRect(0,0,w,hh);const ac=getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||"#c9a227";
+=======
+  const draw=()=>{ctx.clearRect(0,0,w,hh);const ac=getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||"#f26a21";
+>>>>>>> 81ee8dddd1aaf440fd3ff00529a48cfeede021a9
    for(const p of pts){const dx=m.x-p.x,dy=m.y-p.y,d=Math.hypot(dx,dy);if(d<160){p.vx+=dx/d*.02;p.vy+=dy/d*.02}p.vx*=.98;p.vy*=.98;p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>hh)p.vy*=-1}
    ctx.lineWidth=1;for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<110){ctx.strokeStyle="rgba(255,255,255,"+(0.12*(1-d/110))+")";ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}
    ctx.fillStyle=ac;for(const p of pts){ctx.globalAlpha=.7;ctx.beginPath();ctx.arc(p.x,p.y,1.6,0,7);ctx.fill()}ctx.globalAlpha=1;
@@ -158,7 +162,11 @@ function Contact({c,db,uid}){
      h("button",{className:"btn",type:"submit",disabled:!!state.busy},state.busy?"Sending…":"Send enquiry"),
      state.fail&&h("p",{className:"err"},state.fail)))))}
 
+<<<<<<< HEAD
 export const ROUTES=[["","Home"],["about","About us"],["how","How we work"],["programs","Programs"],["sectors","Sectors & work"],["finder","Find your program"],["contact","Contact"]];
+=======
+export const ROUTES=[["","Home"],["how","How we work"],["programs","Programs"],["sectors","Sectors & work"],["finder","Find your program"],["contact","Contact"]];
+>>>>>>> 81ee8dddd1aaf440fd3ff00529a48cfeede021a9
 
 function Hero({c}){useParallax();
  return h("div",{className:"hero",id:"top"},h(Particles),
@@ -177,6 +185,7 @@ const PAGES={
  programs:({c})=>h(React.Fragment,null,h(PageHead,{eyebrow:"Our three programs",heading:c.programsIntro.heading,text:c.programsIntro.text}),h(Programs,{c}),h(Glance,{c}),h(Next,{to:"finder",label:"Which one fits me?"})),
  sectors:({c})=>h(React.Fragment,null,h(PageHead,{eyebrow:"Where we have operated",heading:c.sectors.heading}),h(Sectors,{c:c.sectors}),h(Engagements,{c:c.engagements}),h(Next,{to:"contact",label:"Talk to us"})),
  finder:({c})=>h(React.Fragment,null,h(Finder,{c}),h(Next,{to:"contact",label:"Talk to us"})),
+<<<<<<< HEAD
  contact:({c,db,uid})=>h(Contact,{c,db,uid}),
  about:({c})=>h(React.Fragment,null,h(PageHead,{eyebrow:c.about.eyebrow,heading:c.about.heading}),
    h(Reveal,{as:"section",className:"wrap about"},h("hr",{className:"rule"}),
@@ -197,6 +206,9 @@ const PAGES={
     p.rest.map((t,k)=>h("p",{key:"r"+k},t)),
     h("p",null,p.contact+" ",h("a",{href:"mailto:"+p.email},p.email),"."),
     h("p",{className:"closing"},p.closing))))}};
+=======
+ contact:({c,db,uid})=>h(Contact,{c,db,uid})};
+>>>>>>> 81ee8dddd1aaf440fd3ff00529a48cfeede021a9
 
 export function Site({c,db,uid,route}){
  const [open,setOpen]=useState(false);const [top,setTop]=useState(false);
@@ -206,7 +218,11 @@ export function Site({c,db,uid,route}){
  useEffect(()=>{const f=e=>{if(e.key==="Escape")setOpen(false)};addEventListener("keydown",f);return()=>removeEventListener("keydown",f)},[]);
  const links=ROUTES.map(([r,t])=>h("button",{key:r,className:route===r?"on":"","aria-current":route===r?"page":undefined,onClick:()=>{setOpen(false);nav(r)}},t));
  return h(React.Fragment,null,
+<<<<<<< HEAD
   h("header",null,h("div",{className:"wrap"},h("button",{className:"logo","aria-label":"Solutions India home",onClick:()=>{setOpen(false);nav("")}},h("img",{src:"/logo.svg",alt:"",width:38,height:38}),h("span",null,"SOLUTIONS INDIA",h("small",null,"Business Reimagined"))),
+=======
+  h("header",null,h("div",{className:"wrap"},h("button",{className:"logo",onClick:()=>{setOpen(false);nav("")}},"SOLUTIONS INDIA",h("small",null,"Business Reimagined")),
+>>>>>>> 81ee8dddd1aaf440fd3ff00529a48cfeede021a9
    h("nav",{className:"desk","aria-label":"Main"},links),
    h("button",{className:"burger","aria-label":open?"Close menu":"Open menu","aria-expanded":open,"aria-controls":"drawer",onClick:()=>setOpen(o=>!o)},h("span",{className:open?"x":""})))),
   h("div",{className:"scrim"+(open?" on":""),onClick:()=>setOpen(false),"aria-hidden":true}),
@@ -214,5 +230,9 @@ export function Site({c,db,uid,route}){
    h("div",{className:"dhead"},h("span",{className:"eyebrow"},"Menu"),h("button",{className:"close","aria-label":"Close menu",onClick:()=>setOpen(false)},"✕")),
    links,h("div",{className:"dfoot"},h("code",null,c.contact.phone))),
   h("main",{className:"page",key:route},h(Page,{c,db,uid})),
+<<<<<<< HEAD
   h("footer",null,h("div",{className:"wrap"},h("span",null,c.footer.text),h("span",{className:"flinks"},h("button",{onClick:()=>nav("about")},"About us"),h("button",{onClick:()=>nav("privacy")},"Privacy Policy"),h("button",{onClick:()=>nav("admin")},"Admin")))),
+=======
+  h("footer",null,h("div",{className:"wrap"},h("span",null,c.footer.text),h("button",{onClick:()=>nav("admin")},"Admin"))),
+>>>>>>> 81ee8dddd1aaf440fd3ff00529a48cfeede021a9
   h("button",{className:"totop"+(top?" on":""),"aria-label":"Back to top",onClick:()=>scrollTo({top:0,behavior:reduced()?"auto":"smooth"})},"↑"))}
