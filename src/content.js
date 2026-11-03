@@ -45,19 +45,11 @@ export const DEFAULT={
  contact:{eyebrow:"Our commitment",heading:"Better organized today. Better equipped to grow tomorrow. Better prepared for the future.",
   text:"Our role is not to replace the owner's vision or entrepreneurial instincts, but to complement them with an external perspective, structured thinking and practical execution support.",
   name:"Anuj Yadav",title:"Founder & Principal Consultant, Solutions India",phone:"+91 98199 88232",whatsapp:"919819988232",slogan:"YOU built YOUR BUSINESS. WE help you REIMAGINE it."},
-<<<<<<< HEAD
  about:{eyebrow:"About us",heading:"Transforming the way businesses operate.",
   paras:["At Solutions India, we partner with organizations to improve business performance by transforming the way they operate. Our approach is built on the belief that lasting business success is achieved when strategy, people, processes, technology, governance, and culture work together seamlessly.",
    "We work closely with leadership teams to identify opportunities, eliminate inefficiencies, improve customer experience, optimize costs, and build scalable operating models that deliver measurable business outcomes.",
    "Whether you are a growing enterprise looking to scale or an established organization seeking operational efficiency, Solutions India provides practical, outcome-driven consulting tailored to your business objectives."],
-  pillars:["Strategy","People","Processes","Technology","Governance","Culture"],
-  founder:{eyebrow:"Meet the founder",name:"Anuj",role:"Principal Consultant & Founder",
-   creds:["Engineer, Nagpur University","MBA, University of Mumbai","25+ years across 4 sectors"],
-   paras:["An engineer from Nagpur University and an MBA from the University of Mumbai, Anuj brings over 25 years of diverse industry experience across Logistics, E-commerce, Software Development, and Media & Entertainment.",
-    "His experience spans operations, governance, process optimisation, systems management, risk oversight and business transformation, including leading large, geographically dispersed teams across India.",
-    "Having worked closely with leadership teams to build scalable operating models, robust processes and high-performing organisations, he now brings this experience to Indian entrepreneurs through SOLUTIONS INDIA.",
-    "The objective is simple — to help businesses strengthen their foundations, simplify complexity, improve operational performance and prepare for sustainable growth."],
-   slogan:"YOU built YOUR BUSINESS. WE help you REIMAGINE it."}},
+  pillars:["Strategy","People","Processes","Technology","Governance","Culture"]},
  privacy:{heading:"Privacy Policy",updated:"Last updated: November 2026",
   intro:["Solutions India respects your privacy and is committed to protecting your personal information.",
    "When you submit your details through our LinkedIn Lead Gen Form, we may collect information such as your name, work email, phone number, company/business name, designation and information you voluntarily provide about your business requirements."],
@@ -68,8 +60,6 @@ export const DEFAULT={
    "Where processing is based on consent, you may withdraw your consent. Subject to applicable law, you may also request access, correction or deletion of your personal information or raise a grievance."],
   contact:"To exercise your privacy rights or ask questions about this policy, please contact Solutions India at",email:"solutionsindia@rediffmail.com",
   closing:"By submitting this form, you acknowledge that you have read and understood this Privacy Policy."},
-=======
->>>>>>> 81ee8dddd1aaf440fd3ff00529a48cfeede021a9
  footer:{text:"© 2026 Solutions India. All rights reserved. · Building a Scalable, Process Driven & High Endurance Organization"},
  auth:{passwordHash:"0864b199ff55e38f6c4afaef9a2ead063e7209d6f06f9ec3339f525d8196b57d",pinHash:"03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"}
 };
@@ -78,8 +68,4 @@ export const QUIZ=[
  {q:"What do you want in 12 months?",a:[["Clear roles, SOPs and dashboards in place","bt"],["Operations run on a rhythm without my daily push","coo"],["My successor confidently taking decisions","sp"]]},
  {q:"Which describes your leadership team?",a:[["Capable people, unclear accountability","bt"],["Needs an experienced operator to drive them","coo"],["A son, daughter or internal successor is being groomed","sp"]]}
 ];
-<<<<<<< HEAD
 export const LABELS={hero:"Hero",stats:"Numbers",marquee:"Marquee strip",challenge:"Challenge / before-after",story:"How we work (timeline)",programsIntro:"Programs intro",programs:"Programs",sectors:"Sectors",glance:"At a glance",finder:"Program finder",engagements:"Illustrative engagements",testimonials:"Testimonials (leave empty to hide)",contact:"Contact",about:"About us page",privacy:"Privacy policy page",footer:"Footer"};
-=======
-export const LABELS={hero:"Hero",stats:"Numbers",marquee:"Marquee strip",challenge:"Challenge / before-after",story:"How we work (timeline)",programsIntro:"Programs intro",programs:"Programs",sectors:"Sectors",glance:"At a glance",finder:"Program finder",engagements:"Illustrative engagements",testimonials:"Testimonials (leave empty to hide)",contact:"Contact",footer:"Footer"};
->>>>>>> 81ee8dddd1aaf440fd3ff00529a48cfeede021a9
