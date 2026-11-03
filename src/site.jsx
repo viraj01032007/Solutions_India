@@ -15,6 +15,14 @@ export function useReveal(opts){const ref=useRef(null);const [on,setOn]=useState
  useEffect(()=>{const el=ref.current;if(!el)return;const ob=new IntersectionObserver(es=>{if(es[0].isIntersecting){setOn(true);ob.disconnect()}},opts||{threshold:.2});ob.observe(el);return()=>ob.disconnect()},[]);return [ref,on]}
 export function Reveal({as="div",className="",children,...rest}){const [ref,on]=useReveal();return h(as,{ref,className:"rv"+(on?" in":"")+(className?" "+className:""),...rest},children)}
 
+/* brand logo (vector version of the client's logo; colours come from --logo-* in styles.css) */
+export function Logo(){return h("svg",{className:"brand",viewBox:"0 0 200 74",role:"img","aria-label":"Solutions India, Business Reimagined"},
+ h("text",{x:100,y:31,textAnchor:"middle",className:"lg-n lg-big",textLength:186,lengthAdjust:"spacingAndGlyphs"},"SOLUTIONS"),
+ h("rect",{x:7,y:42,width:56,height:2.6,rx:1.3,className:"lg-o"}),
+ h("text",{x:100,y:50,textAnchor:"middle",className:"lg-o lg-mid",textLength:58,lengthAdjust:"spacing"},"INDIA"),
+ h("rect",{x:137,y:42,width:56,height:2.6,rx:1.3,className:"lg-g"}),
+ h("text",{x:100,y:69,textAnchor:"middle",className:"lg-n lg-small",textLength:132,lengthAdjust:"spacingAndGlyphs"},"Business Reimagined"))}
+
 /* 9 magnetic button */
 export function Magnet({className,onClick,children}){const ref=useRef(null);
  const move=e=>{if(reduced()||!fine())return;const r=ref.current.getBoundingClientRect();const x=(e.clientX-r.left-r.width/2)/r.width,y=(e.clientY-r.top-r.height/2)/r.height;ref.current.style.transform=`translate(${x*10}px,${y*10}px)`};
@@ -28,7 +36,7 @@ function Particles(){const ref=useRef(null);
   size();const ro=new ResizeObserver(size);ro.observe(cv);
   const onm=e=>{const r=cv.getBoundingClientRect();m={x:e.clientX-r.left,y:e.clientY-r.top}};const off=()=>{m={x:-1e4,y:-1e4}};
   cv.parentElement.addEventListener("mousemove",onm);cv.parentElement.addEventListener("mouseleave",off);
-  const draw=()=>{ctx.clearRect(0,0,w,hh);const ac=getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||"#c9a227";
+  const draw=()=>{ctx.clearRect(0,0,w,hh);const ac=getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||"#ea7a03";
    for(const p of pts){const dx=m.x-p.x,dy=m.y-p.y,d=Math.hypot(dx,dy);if(d<160){p.vx+=dx/d*.02;p.vy+=dy/d*.02}p.vx*=.98;p.vy*=.98;p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>hh)p.vy*=-1}
    ctx.lineWidth=1;for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<110){ctx.strokeStyle="rgba(255,255,255,"+(0.12*(1-d/110))+")";ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}
    ctx.fillStyle=ac;for(const p of pts){ctx.globalAlpha=.7;ctx.beginPath();ctx.arc(p.x,p.y,1.6,0,7);ctx.fill()}ctx.globalAlpha=1;
@@ -84,10 +92,10 @@ function Tilt({className,onClick,children,...rest}){const ref=useRef(null);
  const move=e=>{if(reduced()||!fine())return;const r=ref.current.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;ref.current.style.transform=`rotateY(${x*14}deg) rotateX(${-y*14}deg) translateZ(6px)`};
  const leave=()=>{ref.current.style.transform=""};
  return h("button",{ref,className,onClick,onMouseMove:move,onMouseLeave:leave,...rest},children)}
-function Programs({c}){const [i,setI]=useState(0);const p=c.programs[i];
- return h(Reveal,{as:"section",id:"programs",className:"wrap"},
-  h("hr",{className:"rule"}),h("p",{className:"eyebrow",style:{marginTop:14}},"Our three programs"),
-  h("h2",null,c.programsIntro.heading),h("p",{className:"lede"},c.programsIntro.text),
+function Programs({c,bare}){const [i,setI]=useState(0);const p=c.programs[i];
+ return h(Reveal,{as:"section",id:"programs",className:"wrap"+(bare?" bare":"")},
+  !bare&&h("hr",{className:"rule"}),!bare&&h("p",{className:"eyebrow",style:{marginTop:14}},"Our three programs"),
+  !bare&&h("h2",null,c.programsIntro.heading),!bare&&h("p",{className:"lede"},c.programsIntro.text),
   h("div",{className:"tabs",role:"tablist"},c.programs.map((x,k)=>h(Tilt,{key:x.id,role:"tab","aria-selected":k===i,className:"tab"+(k===i?" on":""),onClick:()=>setI(k)},h("span",{className:"n"},x.n),h("b",null,x.name)))),
   h("div",{className:"gb"},h("div",{className:"panel",role:"tabpanel"},h("div",{className:"inner",key:i},
    h("h3",null,p.name),h("p",{className:"tag"},p.tag),h("p",{className:"intro"},p.intro),
@@ -97,8 +105,7 @@ function Programs({c}){const [i,setI]=useState(0);const p=c.programs[i];
    p.note&&h("p",{className:"note"},p.note)))))}
 
 /* 4 sectors + 8 zoom */
-function Sectors({c}){return h(Reveal,{as:"section",className:"wrap",id:"sectors"},h("hr",{className:"rule"}),h("p",{className:"eyebrow",style:{marginTop:14}},"Where we have operated"),h("h2",null,c.heading),
- h("div",{className:"hscroll"},c.items.map((s,k)=>h("div",{className:"sector",key:k},h("div",{className:"art"},h("i"),h("b",null,s.name)),h("p",null,s.text)))))}
+function Sectors({c}){return h(Reveal,{as:"section",className:"wrap",id:"sectors"},h("p",{className:"hint","aria-hidden":true},"Swipe to see all sectors"),h("div",{className:"hscroll"},c.items.map((s,k)=>h("div",{className:"sector",key:k},h("div",{className:"art"},h("i"),h("b",null,s.name)),h("p",null,s.text)))))}
 
 /* 10 stacked cards */
 function Glance({c}){return h("section",{className:"wrap"},h("hr",{className:"rule"}),h("h2",{style:{marginTop:14}},c.glance.heading),
@@ -174,7 +181,7 @@ const PAGES={
    h(Reveal,{as:"section",className:"wrap",id:"challenge"},h("hr",{className:"rule"}),h("p",{className:"eyebrow",style:{marginTop:14}},c.challenge.eyebrow),h("h2",null,c.challenge.heading),h("p",{className:"lede"},c.challenge.p1),h(BeforeAfter,{c:c.challenge})),
    h(Testimonials,{c:c.testimonials}),h(Next,{to:"how",label:"See how we work"})),
  how:({c})=>h(React.Fragment,null,h(PageHead,{eyebrow:c.story.eyebrow,heading:c.story.heading,text:c.story.text}),h(Story,{c:c.story}),h(Next,{to:"programs",label:"Explore the programs"})),
- programs:({c})=>h(React.Fragment,null,h(PageHead,{eyebrow:"Our three programs",heading:c.programsIntro.heading,text:c.programsIntro.text}),h(Programs,{c}),h(Glance,{c}),h(Next,{to:"finder",label:"Which one fits me?"})),
+ programs:({c})=>h(React.Fragment,null,h(PageHead,{eyebrow:"Our three programs",heading:c.programsIntro.heading,text:c.programsIntro.text}),h(Programs,{c,bare:true}),h(Glance,{c}),h(Next,{to:"finder",label:"Which one fits me?"})),
  sectors:({c})=>h(React.Fragment,null,h(PageHead,{eyebrow:"Where we have operated",heading:c.sectors.heading}),h(Sectors,{c:c.sectors}),h(Engagements,{c:c.engagements}),h(Next,{to:"contact",label:"Talk to us"})),
  finder:({c})=>h(React.Fragment,null,h(Finder,{c}),h(Next,{to:"contact",label:"Talk to us"})),
  contact:({c,db,uid})=>h(Contact,{c,db,uid}),
@@ -184,7 +191,12 @@ const PAGES={
      h("div",{className:"prose"},c.about.paras.map((t,k)=>h("p",{key:k,className:k===0?"big":""},t))),
      h("aside",{className:"pillars","aria-label":"What works together"},h("p",{className:"eyebrow"},"Working together, seamlessly"),
       h("ul",null,c.about.pillars.map((t,k)=>h("li",{key:k,style:{"--i":k}},h("span",null,String(k+1).padStart(2,"0")),t)))))),
-   h(Next,{to:"programs",label:"Explore the programs"})),
+   c.about.founder&&(f=>h(Reveal,{as:"section",className:"wrap founder"},h("hr",{className:"rule"}),h("p",{className:"eyebrow",style:{marginTop:14}},f.eyebrow),
+    h("div",{className:"fcard"},
+     h("div",{className:"fside"},h("div",{className:"mono","aria-hidden":true},f.name.charAt(0)),h("h2",null,f.name),h("p",{className:"role"},f.role),
+      h("ul",{className:"creds"},f.creds.map((t,k)=>h("li",{key:k},t)))),
+     h("div",{className:"prose"},f.paras.map((t,k)=>h("p",{key:k,className:k===f.paras.length-1?"obj":""},t)),h("p",{className:"slogan"},f.slogan)))))(c.about.founder),
+   h(Next,{to:"contact",label:"Talk to "+c.about.founder.name})),
  privacy:({c})=>{const p=c.privacy;return h(React.Fragment,null,h(PageHead,{eyebrow:"Solutions India",heading:p.heading,text:p.updated}),
    h("section",{className:"wrap legal"},h("article",{className:"prose"},
     p.intro.map((t,k)=>h("p",{key:"i"+k},t)),
@@ -194,20 +206,33 @@ const PAGES={
     h("p",{className:"closing"},p.closing))))}};
 
 export function Site({c,db,uid,route}){
- const [open,setOpen]=useState(false);const [top,setTop]=useState(false);
+ const [open,setOpen]=useState(false);const [top,setTop]=useState(false);const [sc,setSc]=useState(false);const [bar,setBar]=useState(false);
  const Page=PAGES[route]||PAGES[""];
  useEffect(()=>{document.body.classList.toggle("noscroll",open);return()=>document.body.classList.remove("noscroll")},[open]);
- useEffect(()=>{const f=()=>setTop(scrollY>600);f();addEventListener("scroll",f,{passive:true});return()=>removeEventListener("scroll",f)},[]);
+ useEffect(()=>{const f=()=>{setTop(scrollY>600);setSc(scrollY>12);setBar(scrollY>320)};f();addEventListener("scroll",f,{passive:true});return()=>removeEventListener("scroll",f)},[]);
  useEffect(()=>{const f=e=>{if(e.key==="Escape")setOpen(false)};addEventListener("keydown",f);return()=>removeEventListener("keydown",f)},[]);
- const links=ROUTES.map(([r,t])=>h("button",{key:r,className:route===r?"on":"","aria-current":route===r?"page":undefined,onClick:()=>{setOpen(false);nav(r)}},t));
+ /* staggered scroll-in for cards and list items (mobile + desktop) */
+ useEffect(()=>{if(reduced()||!("IntersectionObserver" in window))return;let ob;const t=setTimeout(()=>{
+  const els=[...document.querySelectorAll("main .focus li, main .scard, main .sector, main .acc details, main .creds li, main .two>div, main .stat, main .fcard .prose p, main .legal .prose>*, main .tstep h3")];
+  ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");ob.unobserve(e.target)}}),{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+  els.forEach((el,k)=>{if(el.getBoundingClientRect().top<innerHeight*.9)return;el.classList.add("sv");ob.observe(el)})},60);
+  return()=>{clearTimeout(t);ob&&ob.disconnect()}},[route]);
+ const go2=r=>{setOpen(false);nav(r)};
+ const links=ROUTES.map(([r,t],k)=>h("button",{key:r,className:route===r?"on":"","aria-current":route===r?"page":undefined,style:{"--i":k},onClick:()=>go2(r)},h("span",{className:"dn"},String(k+1).padStart(2,"0")),t));
  return h(React.Fragment,null,
-  h("header",null,h("div",{className:"wrap"},h("button",{className:"logo","aria-label":"Solutions India home",onClick:()=>{setOpen(false);nav("")}},h("img",{src:"/logo.svg",alt:"",width:38,height:38}),h("span",null,"SOLUTIONS INDIA",h("small",null,"Business Reimagined"))),
+  h("header",{className:sc?"sc":""},h("div",{className:"wrap"},h("button",{className:"logo","aria-label":"Solutions India home",onClick:()=>{setOpen(false);nav("")}},h(Logo)),
    h("nav",{className:"desk","aria-label":"Main"},links),
    h("button",{className:"burger","aria-label":open?"Close menu":"Open menu","aria-expanded":open,"aria-controls":"drawer",onClick:()=>setOpen(o=>!o)},h("span",{className:open?"x":""})))),
   h("div",{className:"scrim"+(open?" on":""),onClick:()=>setOpen(false),"aria-hidden":true}),
   h("nav",{id:"drawer",className:"drawer"+(open?" on":""),"aria-label":"Main menu","aria-hidden":!open},
    h("div",{className:"dhead"},h("span",{className:"eyebrow"},"Menu"),h("button",{className:"close","aria-label":"Close menu",onClick:()=>setOpen(false)},"✕")),
-   links,h("div",{className:"dfoot"},h("code",null,c.contact.phone))),
+   links,h("div",{className:"dfoot"},h("p",{className:"eyebrow"},"Talk to "+c.contact.name.split(" ")[0]),
+    h("div",{className:"dacts"},h("a",{className:"btn",href:"tel:"+c.contact.phone.replace(/\s/g,"")},"Call"),h("a",{className:"btn wa",href:"https://wa.me/"+c.contact.whatsapp,target:"_blank",rel:"noopener"},"WhatsApp")),
+    h("code",null,c.contact.phone))),
   h("main",{className:"page",key:route},h(Page,{c,db,uid})),
   h("footer",null,h("div",{className:"wrap"},h("span",null,c.footer.text),h("span",{className:"flinks"},h("button",{onClick:()=>nav("about")},"About us"),h("button",{onClick:()=>nav("privacy")},"Privacy Policy"),h("button",{onClick:()=>nav("admin")},"Admin")))),
+  h("div",{className:"mbar"+(bar&&!open&&route!=="contact"?" on":""),role:"region","aria-label":"Quick contact"},
+   h("a",{href:"tel:"+c.contact.phone.replace(/\s/g,"")},h("i",{className:"ic call","aria-hidden":true}),"Call"),
+   h("a",{href:"https://wa.me/"+c.contact.whatsapp,target:"_blank",rel:"noopener"},h("i",{className:"ic wa","aria-hidden":true}),"WhatsApp"),
+   h("button",{className:"pri",onClick:()=>nav("contact")},"Enquire now")),
   h("button",{className:"totop"+(top?" on":""),"aria-label":"Back to top",onClick:()=>scrollTo({top:0,behavior:reduced()?"auto":"smooth"})},"↑"))}
