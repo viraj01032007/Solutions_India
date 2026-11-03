@@ -72,18 +72,23 @@ function Stats({items}){const [ref,start]=useReveal({threshold:.35});
 function Marquee({items}){const list=[...items,...items];return h("div",{className:"marquee","aria-hidden":true},h("div",{className:"track"},list.map((t,k)=>h("span",{key:k},t))))}
 
 /* 21 before/after */
-function BeforeAfter({c}){const [cut,setCut]=useState(50);
- return h("div",{className:"ba",style:{"--cut":cut+"%"}},
-  h("div",{className:"side before"},h("span",{className:"tag l"},"Before"),h("h3",null,c.beforeTitle),h("ul",null,c.before.map((t,k)=>h("li",{key:k},t)))),
-  h("div",{className:"side after"},h("span",{className:"tag r"},"After"),h("h3",null,c.afterTitle),h("ul",null,c.after.map((t,k)=>h("li",{key:k},t)))),
-  h("div",{className:"handle"}),h("input",{type:"range",min:5,max:95,value:cut,"aria-label":"Drag to compare before and after",onChange:e=>setCut(Number(e.target.value))}))}
+function BeforeAfter({c}){
+ return h("div",{className:"ba2"},
+  h("div",{className:"bcard before"},h("span",{className:"tag"},"Before"),h("h3",null,c.beforeTitle),h("ul",null,c.before.map((t,k)=>h("li",{key:k,style:{"--i":k}},t)))),
+  h("div",{className:"barrow","aria-hidden":true},h("span",null,"→")),
+  h("div",{className:"bcard after"},h("span",{className:"tag"},"After"),h("h3",null,c.afterTitle),h("ul",null,c.after.map((t,k)=>h("li",{key:k,style:{"--i":k}},t)))))}
 
 /* 3 sticky story + 18 timeline */
 function Story({c}){const ref=useRef(null);const [prog,setProg]=useState(0);const [cur,setCur]=useState(0);
  useEffect(()=>{const el=ref.current;const f=()=>{const r=el.getBoundingClientRect();const p=Math.min(1,Math.max(0,(innerHeight*.6-r.top)/r.height));setProg(p);setCur(Math.min(c.steps.length-1,Math.floor(p*c.steps.length)))};f();addEventListener("scroll",f,{passive:true});return()=>removeEventListener("scroll",f)},[c.steps.length]);
  return h("section",{className:"wrap",id:"how"},h("hr",{className:"rule"}),
   h("div",{className:"story"},
-   h("div",{className:"pin"},h("p",{className:"eyebrow",style:{marginTop:14}},c.eyebrow),h("h2",null,c.heading),h("p",{className:"lede"},c.text),h("p",{className:"cur"},"Step "+(cur+1)+" of "+c.steps.length+": "+(c.steps[cur]||{}).title)),
+   h("div",{className:"pin"},h("div",{className:"spanel"},
+    h("p",{className:"eyebrow"},"Step "+(cur+1)+" of "+c.steps.length),
+    h("div",{className:"bignum",key:"n"+cur},String(cur+1).padStart(2,"0")),
+    h("h3",{key:"t"+cur,className:"stitle"},(c.steps[cur]||{}).title),
+    h("div",{className:"sbar"},h("i",{style:{width:Math.round(prog*100)+"%"}})),
+    h("div",{className:"sdots"},c.steps.map((_,k)=>h("span",{key:k,className:k<=cur?"on":""}))))),
    h("div",{className:"tl",ref},h("div",{className:"line",style:{"--h":Math.round(prog*100)+"%"}}),
     c.steps.map((s,k)=>h("div",{key:k,className:"tstep"+(k<=cur?" in":"")},h("span",{className:"k"},"Step "+(k+1)),h("h3",null,s.title),h("p",null,s.text))))))}
 
@@ -152,9 +157,12 @@ function Contact({c,db,uid}){
   h("hr",{className:"rule"}),h("p",{className:"eyebrow",style:{marginTop:14}},c.contact.eyebrow),
   h("h2",null,c.contact.heading),h("p",{className:"lede"},c.contact.text),
   h("div",{className:"card"},
-   h("div",null,h("p",{className:"name"},c.contact.name),h("p",{style:{color:"var(--muted)"}},c.contact.title),
+   h("div",{className:"cleft"},h("div",{className:"chead"},h("div",{className:"mono","aria-hidden":true},c.contact.name.charAt(0)),h("div",null,h("p",{className:"name"},c.contact.name),h("p",{style:{color:"var(--muted)"}},c.contact.title))),
     h("div",{className:"phone"},h("code",{id:"ph"},c.contact.phone),h("button",{className:"mini",onClick:copy},copied?"Copied":"Copy number"),
      h("a",{className:"mini",href:"https://wa.me/"+c.contact.whatsapp,target:"_blank",rel:"noopener"},"WhatsApp")),
+    c.privacy&&h("a",{className:"mail",href:"mailto:"+c.privacy.email},c.privacy.email),
+    h("div",{className:"nextsteps"},h("p",{className:"eyebrow"},"What happens next"),
+     h("ol",null,["You share a few details about your business","Anuj calls you back for an initial conversation","Together you agree the right starting point"].map((t,k)=>h("li",{key:k},t)))),
     h("p",{className:"slogan"},c.contact.slogan)),
    h("div",null,state.sent?h("div",{className:"ok"},"Thanks, "+state.sent+". Your enquiry has reached "+c.contact.name+"."):
     h("form",{onSubmit:submit},
@@ -170,8 +178,17 @@ export const ROUTES=[["","Home"],["about","About us"],["how","How we work"],["pr
 function Hero({c}){useParallax();
  return h("div",{className:"hero",id:"top"},h(Particles),
   h("div",{className:"float a","data-px":"-0.12"}),h("div",{className:"float b","data-px":"0.18"}),h("div",{className:"float c","data-px":"-0.3"}),
-  h("div",{className:"wrap"},h("p",{className:"eyebrow"},c.hero.eyebrow),h(Headline,{lead:c.hero.lead,words:c.hero.words,tail:c.hero.tail}),h("p",null,c.hero.text),
-   h("div",{className:"cta"},h(Magnet,{onClick:()=>nav("programs")},"See the programs"),h(Magnet,{className:"ghost",onClick:()=>nav("finder")},"Which one fits me?"))))}
+  h("div",{className:"wrap hgrid"},h("div",{className:"hcopy"},h("p",{className:"eyebrow"},c.hero.eyebrow),h(Headline,{lead:c.hero.lead,words:c.hero.words,tail:c.hero.tail}),h("p",null,c.hero.text),
+   h("div",{className:"cta"},h(Magnet,{onClick:()=>nav("programs")},"See the programs"),h(Magnet,{className:"ghost",onClick:()=>nav("finder")},"Which one fits me?"))),
+   h(HeroVisual,{c})))}
+/* desktop hero visual: an animated "organisation building up" card */
+function HeroVisual({c}){const rows=["Structure & roles","Processes & SOPs","KPIs & reviews","Governance","Growth readiness"];
+ return h("div",{className:"hvis","aria-hidden":true},
+  h("div",{className:"hcard"},
+   h("div",{className:"hhead"},h("span",{className:"dot o"}),h("span",{className:"dot w"}),h("span",{className:"dot g"}),h("b",null,"Business reimagined")),
+   h("div",{className:"bars"},[38,52,46,64,72,86].map((v,k)=>h("i",{key:k,style:{"--v":v+"%","--i":k}}))),
+   h("ul",{className:"meters"},rows.map((t,k)=>h("li",{key:k,style:{"--i":k}},h("span",null,t),h("em",null,h("i",null)))))),
+  h("div",{className:"chip c1"},"Owner-independent"),h("div",{className:"chip c2"},"Scalable"),h("div",{className:"chip c3"},c.stats[0].value+(c.stats[0].suffix||"")+" yrs experience"))}
 
 function PageHead({eyebrow,heading,text}){return h("div",{className:"phead"},h("div",{className:"wrap"},h("p",{className:"eyebrow"},eyebrow),h("h1",null,heading),text&&h("p",{className:"lede"},text)))}
 function Next({to,label}){return h("div",{className:"wrap next"},h("button",{className:"btn",onClick:()=>nav(to)},label+" →"))}
@@ -230,7 +247,15 @@ export function Site({c,db,uid,route}){
     h("div",{className:"dacts"},h("a",{className:"btn",href:"tel:"+c.contact.phone.replace(/\s/g,"")},"Call"),h("a",{className:"btn wa",href:"https://wa.me/"+c.contact.whatsapp,target:"_blank",rel:"noopener"},"WhatsApp")),
     h("code",null,c.contact.phone))),
   h("main",{className:"page",key:route},h(Page,{c,db,uid})),
-  h("footer",null,h("div",{className:"wrap"},h("span",null,c.footer.text),h("span",{className:"flinks"},h("button",{onClick:()=>nav("about")},"About us"),h("button",{onClick:()=>nav("privacy")},"Privacy Policy"),h("button",{onClick:()=>nav("admin")},"Admin")))),
+  h("footer",null,h("div",{className:"wrap fgrid"},
+    h("div",{className:"fbrand"},h("button",{className:"logo","aria-label":"Solutions India home",onClick:()=>nav("")},h(Logo)),h("p",null,c.contact.slogan)),
+    h("div",null,h("p",{className:"fh"},"Explore"),h("ul",null,ROUTES.map(([r,t])=>h("li",{key:r},h("button",{onClick:()=>nav(r)},t))))),
+    h("div",null,h("p",{className:"fh"},"Programs"),h("ul",null,c.programs.map(p=>h("li",{key:p.id},h("button",{onClick:()=>nav("programs")},p.name))))),
+    h("div",null,h("p",{className:"fh"},"Get in touch"),h("ul",null,
+     h("li",null,h("a",{href:"tel:"+c.contact.phone.replace(/\s/g,"")},c.contact.phone)),
+     h("li",null,h("a",{href:"https://wa.me/"+c.contact.whatsapp,target:"_blank",rel:"noopener"},"WhatsApp")),
+     c.privacy&&h("li",null,h("a",{href:"mailto:"+c.privacy.email},c.privacy.email))))),
+   h("div",{className:"wrap fbottom"},h("span",null,c.footer.text),h("span",{className:"flinks"},h("button",{onClick:()=>nav("privacy")},"Privacy Policy"),h("button",{onClick:()=>nav("admin")},"Admin")))),
   h("div",{className:"mbar"+(bar&&!open&&route!=="contact"?" on":""),role:"region","aria-label":"Quick contact"},
    h("a",{href:"tel:"+c.contact.phone.replace(/\s/g,"")},h("i",{className:"ic call","aria-hidden":true}),"Call"),
    h("a",{href:"https://wa.me/"+c.contact.whatsapp,target:"_blank",rel:"noopener"},h("i",{className:"ic wa","aria-hidden":true}),"WhatsApp"),
